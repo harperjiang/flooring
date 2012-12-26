@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -72,13 +73,15 @@ public class Query extends HttpServlet {
 	    }
 	    
 		try {
-			JSONObject query = new JSONObject(inputStringBuilder.toString());
+			JSONArray query = new JSONArray(inputStringBuilder.toString());
 			responseOutput.println(query);
+			//responseOutput.println(query.getJSONArray(0));
 			responseOutput.close();
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 
 		/*
 		 * do the query to database

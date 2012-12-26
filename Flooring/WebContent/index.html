@@ -2,16 +2,25 @@
 <html>
 <script type="text/javascript">
 
-var scene = {};
+var scene = [];
 
-function getresult(){
+function getclick(){
     if (document.getElementById("scheme").value == ""){
         document.getElementById("result").innerHTML = "scheme should be selected";
         return;
     }
     else{
-    	scene.scheme=document.getElementById("scheme").value;
+    	scene.push([{"scheme":document.getElementById("scheme").value}]);
     }
+    var str = new String();
+    for(var i=0; i<scene.length;i++){
+    	str+=scene[i][0].scheme+" haha"
+    }
+   document.getElementById("result").innerHTML=str;
+}
+
+function getresult(){
+
     ajaxsend();
 }
 
@@ -22,10 +31,19 @@ function ajaxsend(){
 	{
 	    if(xmlhttp.readyState==4 && xmlhttp.status==200)
 	    {
-	    	var stats = eval( "("+xmlhttp.responseText+")");
-			document.getElementById("result").innerHTML="The medium: " + stats.scheme;
+	    	document.getElementById("result").innerHTML="";
+	    	var stats = eval("("+xmlhttp.responseText+")");
+	    	//var arr = JSON.parse(xmlhttp.responseText);
+	    	for(var i=0; i<stats.length;i++ )
+	    	{
+				document.getElementById("result").innerHTML +="The medium: " + stats[i][0].scheme +"<br />";
+				//document.getElementById("result").innerHTML +="The medium: " + stats[i].scheme +"<br />";
+	    	}
 			//document.getElementById("result").innerHTML=xmlhttp.responseText;
 	    }
+	    /*else{
+	    	document.getElementById("result").innerHTML="readystate is " + xmlhttp.readyState + "  and status is " + xmlhttp.status + " CANNOT PROCEED";
+	    }*/
 	}
 	xmlhttp.open("POST", "Query", true);
 	//var param = "scene=haha";	
@@ -44,13 +62,13 @@ function ajaxsend(){
 </head>
 <body>
 <form>
-<label for="scheme">Ventilation Scheme:</label>
-<select id="scheme">
+<label for="scheme">Ventilation Scheme:</label> 
+<select id="scheme" onchange="getclick();">
 	<option selected>
 	<option value="0">Natural
 	<option value="1">Air Conditioned
-</select>
-<input type="button" value="get result" onClick="getresult();"/>
+</select> 
+<input type="button" value="get result" onclick="getresult();"/>
 </form>
 <div id="result"></div>
 </body>
