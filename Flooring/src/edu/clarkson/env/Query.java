@@ -11,9 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.Gson;
 
 /**
  * Servlet implementation class Query
@@ -71,22 +69,22 @@ public class Query extends HttpServlet {
 	    while ((line = reader.readLine()) != null) {
 	            inputStringBuilder.append(line);
 	    }
-	    
-		try {
-			JSONArray query = new JSONArray(inputStringBuilder.toString());
-			responseOutput.println(query);
-			//responseOutput.println(query.getJSONArray(0));
-			responseOutput.close();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 
-		/*
-		 * do the query to database
-		 * 
-		 * */
+	    //JSONArray query = new JSONArray(inputStringBuilder.toString());
+	    Gson gson = new Gson();
+	    Scene[] scenes = gson.fromJson(inputStringBuilder.toString(), Scene[].class);
+	    //System.out.print(scenes);
+	    responseOutput.println(gson.toJson(scenes));
+	    //responseOutput.println(query.getJSONArray(0));
+	    responseOutput.close();
+
+
+
+	    /*
+	     * do the query to database
+	     * 
+	     * */
 	}
 
 }

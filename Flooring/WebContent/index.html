@@ -10,11 +10,11 @@ function getclick(){
         return;
     }
     else{
-    	scene.push([{"scheme":document.getElementById("scheme").value}]);
+    	scene.push({"scheme":document.getElementById("scheme").value});
     }
     var str = new String();
     for(var i=0; i<scene.length;i++){
-    	str+=scene[i][0].scheme+" haha"
+    	str+=scene[i].scheme+" haha<br />"
     }
    document.getElementById("result").innerHTML=str;
 }
@@ -33,11 +33,9 @@ function ajaxsend(){
 	    {
 	    	document.getElementById("result").innerHTML="";
 	    	var stats = eval("("+xmlhttp.responseText+")");
-	    	//var arr = JSON.parse(xmlhttp.responseText);
 	    	for(var i=0; i<stats.length;i++ )
 	    	{
-				document.getElementById("result").innerHTML +="The medium: " + stats[i][0].scheme +"<br />";
-				//document.getElementById("result").innerHTML +="The medium: " + stats[i].scheme +"<br />";
+				document.getElementById("result").innerHTML +="The medium: " + stats[i].scheme +"<br />";
 	    	}
 			//document.getElementById("result").innerHTML=xmlhttp.responseText;
 	    }
