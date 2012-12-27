@@ -31,11 +31,17 @@ function ajaxsend(){
 	{
 	    if(xmlhttp.readyState==4 && xmlhttp.status==200)
 	    {
+	    	
 	    	document.getElementById("result").innerHTML="";
 	    	var stats = eval("("+xmlhttp.responseText+")");
 	    	for(var i=0; i<stats.length;i++ )
 	    	{
-				document.getElementById("result").innerHTML +="The medium: " + stats[i].scheme +"<br />";
+				document.getElementById("result").innerHTML +=  "Record " + i + " stats as below:<br />";	    		
+				document.getElementById("result").innerHTML +=  "--------record min ------> " + stats[i].min +"<br />";
+				document.getElementById("result").innerHTML +=  "--------record 25% ------> " + stats[i].p25 +"<br />";
+				document.getElementById("result").innerHTML +=  "--------record medium ---> " + stats[i].medium +"<br />";
+				document.getElementById("result").innerHTML +=  "--------record 75% ------> " + stats[i].p75 +"<br />";
+				document.getElementById("result").innerHTML +=  "--------record max ------> " + stats[i].max +"<br />";
 	    	}
 			//document.getElementById("result").innerHTML=xmlhttp.responseText;
 	    }
