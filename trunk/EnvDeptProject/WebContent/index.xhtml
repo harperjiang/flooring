@@ -1,0 +1,101 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/template/page_template.xhtml">
+	<ui:define name="title">Index</ui:define>
+	<ui:define name="scriptandcss">
+		<!-- Common Scripts -->
+		<script src="script/class.js" type="text/javascript" />
+		<script src="script/dialog.js" type="text/javascript" />
+		<!-- Scripts for Chart Drawing -->
+		<script src="script/chart/common.js" type="text/javascript" />
+		<script src="script/chart/model.js" type="text/javascript" />
+		<script src="script/chart/chart.js" type="text/javascript" />
+		<!-- Scripts for Data Tables -->
+		<script src="script/datatable/datatable.js" type="text/javascript" />
+		<!-- Scripts for executing DWR -->
+		<script type='text/javascript' src='dwr/interface/summaryService.js'></script>
+		<script type='text/javascript' src='dwr/engine.js'></script>
+		<script type='text/javascript' src='dwr/util.js'></script>
+		<!-- Operations -->
+		<script type="text/javascript" src="script/interact.js"></script>
+	</ui:define>
+	<ui:define name="body">
+		<div style="width: 650px; float: left;">
+			<h:panelGroup layout="block" styleClass="formlayout">
+				<h:outputLabel for="vent_scheme" value="Ventilation Scheme:" />
+				<h:selectOneMenu id="vent_scheme">
+					<f:selectItem itemLabel="Natural" itemValue="1" />
+					<f:selectItem itemLabel="Air Conditioned" itemValue="2" />
+				</h:selectOneMenu>
+				<h:outputLabel for="house_type" value="House Type:" />
+				<h:selectOneMenu id="house_type">
+					<f:selectItem itemLabel="Single Detached" itemValue="1" />
+					<f:selectItem itemLabel="Apartment Building" itemValue="2" />
+				</h:selectOneMenu>
+				<h:outputLabel for="floor_type" value="Flooring Type:" />
+				<h:selectOneMenu id="floor_type">
+					<f:selectItem itemLabel="Hardwood" itemValue="1" />
+					<f:selectItem itemLabel="Carpeting" itemValue="2" />
+					<f:selectItem itemLabel="HD Carpeting" itemValue="3" />
+				</h:selectOneMenu>
+				<h:outputLabel for="floor_loading" value="Flooring Loading:" />
+				<h:selectOneMenu id="floor_loading">
+					<f:selectItem itemLabel="Low Loading" itemValue="1" />
+					<f:selectItem itemLabel="Medium Loading" itemValue="2" />
+					<f:selectItem itemLabel="High Loading" itemValue="3" />
+				</h:selectOneMenu>
+
+				<h:outputLabel for="vent_rate" value="Ventilation Rate Level:" />
+				<h:selectOneMenu id="vent_rate">
+					<f:selectItem itemLabel="Low" itemValue="1" />
+					<f:selectItem itemLabel="Medium" itemValue="2" />
+					<f:selectItem itemLabel="High" itemValue="3" />
+				</h:selectOneMenu>
+
+				<h:outputLabel for="part_gran" value="Particle Granularity:" />
+				<h:selectOneMenu id="part_gran">
+					<f:selectItem itemLabel="Fine" itemValue="1" />
+					<f:selectItem itemLabel="Corase" itemValue="2" />
+				</h:selectOneMenu>
+				<h:outputLabel for="prob_sus" value="Probability of Suspension:" />
+				<h:selectOneMenu id="prob_sus">
+					<f:selectItem itemLabel="CR=0" itemValue="1" />
+					<f:selectItem itemLabel="CR≠0" itemValue="2" />
+					<f:selectItem itemLabel="CR=∅" itemValue="3" />
+				</h:selectOneMenu>
+				<input type="button" value="Show Distribution"
+					onclick="show_distribution()" />
+			</h:panelGroup>
+			<div class="data_table">
+				<div class="data_table_title">Selected Distributions:</div>
+				<div id="datatable" class="data_table_content"
+					style="height: 340px;" />
+				<div>
+					<button onclick="remove_distribution()">Remove Selected
+						Distribution</button>
+				</div>
+			</div>
+			<div>
+				<h:form enctype="multipart/form-data">
+					<h:outputLabel value="Upload Data File:" />
+					<input type="file" id="fileupload" name="fileupload" />
+					<h:commandButton action="#{uploadFileBean.upload}" value="Upload" />
+				</h:form>
+			</div>
+		</div>
+		<div>
+			<canvas id="canvas" width="800" height="600"
+				style="border: 1px solid black;"> </canvas>
+			<script type="text/javascript">
+				var thechart = new Chart(document.getElementById('canvas'));
+				thechart.redraw();
+				var thedatatable = new DataTable(document
+						.getElementById('datatable'));
+				thedatatable.renderer.itemRenderer = new SummaryRenderer();
+			</script>
+		</div>
+		<div id="progress_mask" class="mask" style="display: none;" />
+	</ui:define>
+</ui:composition>

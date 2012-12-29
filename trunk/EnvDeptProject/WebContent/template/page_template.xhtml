@@ -1,0 +1,25 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:kui="http://kooobao.com/jsf/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title><ui:insert name="title" /></title>
+	<link href="style/main.css" rel="stylesheet" type="text/css" />
+	<ui:insert name="scriptandcss" />
+</h:head>
+<h:body>
+	<div class="body">
+		<div align="center"
+			style="margin: 0px; padding: 0px; text-align: center">
+			<img src="image/logo_long.gif" />
+		</div>
+		<div class="content">
+			<ui:insert name="body" />
+		</div>
+	</div>
+	<kui:messages />
+	<div class="bottom">Department of Computer Science, Clarkson
+		University, 2012</div>
+</h:body>
+</html>
