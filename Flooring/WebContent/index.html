@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<script type="text/javascript">
+
+var scene = [];
+
+function getclick(){
+    if (document.getElementById("scheme").value == ""){
+        document.getElementById("result").innerHTML = "scheme should be selected";
+        return;
+    }
+    else{
+    	scene.push({"scheme":document.getElementById("scheme").value});
+    }
+    var str = new String();
+    for(var i=0; i<scene.length;i++){
+    	str+=scene[i].scheme+" haha<br />"
+    }
+   document.getElementById("result").innerHTML=str;
+}
+
+function getresult(){
+
+    ajaxsend();
+}
+
+function ajaxsend(){
+	var xmlhttp;
+	xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange=function()
+	{
+	    if(xmlhttp.readyState==4 && xmlhttp.status==200)
+	    {
+	    	
+	    	document.getElementById("result").innerHTML="";
+	    	var stats = eval("("+xmlhttp.responseText+")");
+	    	for(var i=0; i<stats.length;i++ )
+	    	{
+				document.getElementById("result").innerHTML +=  "Record " + i + " stats as below:<br />";	    		
+				document.getElementById("result").innerHTML +=  "--------record min ------> " + stats[i].min +"<br />";
+				document.getElementById("result").innerHTML +=  "--------record 25% ------> " + stats[i].p25 +"<br />";
+				document.getElementById("result").innerHTML +=  "--------record medium ---> " + stats[i].medium +"<br />";
+				document.getElementById("result").innerHTML +=  "--------record 75% ------> " + stats[i].p75 +"<br />";
+				document.getElementById("result").innerHTML +=  "--------record max ------> " + stats[i].max +"<br />";
+	    	}
+			//document.getElementById("result").innerHTML=xmlhttp.responseText;
+	    }
+	    /*else{
+	    	document.getElementById("result").innerHTML="readystate is " + xmlhttp.readyState + "  and status is " + xmlhttp.status + " CANNOT PROCEED";
+	    }*/
+	}
+	xmlhttp.open("POST", "Query", true);
+	//var param = "scene=haha";	
+	var param = JSON.stringify(scene); //has to be serialized
+	xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	//xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	//xmlhttp.setRequestHeader("Content-length", param.length);
+	//xmlhttp.setRequestHeader("Connection", "close");
+	xmlhttp.send(param);
+
+}
+</script>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Query Site</title>
+</head>
+<body>
+<form>
+<label for="scheme">Ventilation Scheme:</label> 
+<select id="scheme" onchange="getclick();">
+	<option selected>
+	<option value="0">Natural
+	<option value="1">Air Conditioned
+</select> 
+<input type="button" value="get result" onclick="getresult();"/>
+</form>
+<div id="result"></div>
+</body>
+</html>
