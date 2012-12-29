@@ -1,0 +1,38 @@
+@IMPORT "dialog.css";
+
+@IMPORT "datatable.css";
+
+body {
+	font-size: 14px;
+	font-family: Sans-Serif;
+}
+
+div {
+	
+}
+
+div.body {
+	height: auto;
+	overflow: auto;
+	min-height: 400px;
+}
+
+.formlayout {
+	width: 500px;
+}
+
+.formlayout label {
+	display: block;
+	float: left;
+	width: 250px;
+}
+
+.formlayout select {
+	width: 200px;
+}
+
+div.clearer {
+	clear: left;
+	line-height: 0;
+	height: 0;
+}

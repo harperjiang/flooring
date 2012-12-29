@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="EnvDeptProject">
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/test"/>
+        <dependent-module archiveName="kooobao-common.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/kooobao-common/kooobao-common">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="EnvDeptProject"/>
+        <property name="java-output-path" value="/EnvDeptProject/build/classes"/>
+    </wb-module>
+</project-modules>

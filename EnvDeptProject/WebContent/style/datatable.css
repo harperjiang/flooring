@@ -1,0 +1,33 @@
+.data_table {
+	margin-top: 25px;
+	margin-bottom: 25px;
+	margin-right: 10px;
+}
+
+.data_table_title {
+	font-weight: bold;
+	font-size: 16px;
+}
+
+.data_table_content {
+	background-color: #eeeeee;
+	padding-left: 5px;
+	padding-top: 5px;
+	margin-bottom: 10px;
+}
+
+.data_table_item {
+	margin-top: 4px;
+	margin-bottom: 4px;
+	cursor: default;
+	margin-left: 5px;
+}
+
+.data_table_item_selected {
+	margin-top: 4px;
+	margin-bottom: 4px;
+	cursor: default;
+	margin-left: 5px;
+	background-color: #aaaaaa;
+	color: #ffffff;
+}

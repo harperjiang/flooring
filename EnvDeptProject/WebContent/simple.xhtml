@@ -1,0 +1,46 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/template/page_template.xhtml">
+	<ui:define name="title">Test DWR</ui:define>
+	<ui:define name="scriptandcss">
+		<script src="script/dialog.js" type="text/javascript"></script>
+		<script src="script/class.js" type="text/javascript"></script>
+		<script src="script/datatable/datatable.js" type="text/javascript"></script>
+	</ui:define>
+	<ui:define name="body">
+		<script type="text/javascript">
+				<!--
+				function getIndex(item) {
+					var counter = 0;
+					for(var i = 0 ; i < item.parentNode.childNodes.length;i++) {
+						if(item.parentNode.childNodes.item(i) === item) {
+							return counter;
+						}
+						if(button.parentNode.parentNode.childNodes.item(i).v == 'x')		
+							counter++;
+					}
+				}
+				-->
+				</script>
+		<div class="data_table" id="data_table"
+			style="width: 400px; height: 500px" />
+		<script type="text/javascript">
+			var thedatatable = new DataTable(document.getElementById('data_table'));
+			thedatatable.addItem("AAA");
+			thedatatable.addItem("BBB");
+			thedatatable.addItem("CCC");
+			thedatatable.addItem("DDD");
+			
+			function delete_selection() {
+				var selection = thedatatable.selectModel.getSelection();
+				selection.sort();
+				for(var i = selection.length-1;i>=0;i--) {
+					thedatatable.removeItem(selection[i]);
+				}
+			}
+		</script>
+		<button onclick="delete_selection()">Delete</button>
+	</ui:define>
+</ui:composition>

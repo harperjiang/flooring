@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<import resource="env.xml" />
+
+	<bean id="criteriaDao" class="edu.clarkson.cs.env.dao.jpa.JpaCriteriaDao">
+		<property name="entityManager" ref="entityManager" />
+	</bean>
+	<bean id="recordDao" class="edu.clarkson.cs.env.dao.jpa.JpaRecordDao">
+		<property name="entityManager" ref="entityManager" />
+	</bean>
+	<bean id="summaryDao" class="edu.clarkson.cs.env.dao.jpa.JpaSummaryDao">
+		<property name="entityManager" ref="entityManager" />
+	</bean>
+
+	<bean id="fileService" class="edu.clarkson.cs.env.service.DefaultFileService">
+		<property name="criteriaDao" ref="criteriaDao" />
+		<property name="recordDao" ref="recordDao" />
+	</bean>
+	<bean id="summaryService" class="edu.clarkson.cs.env.service.DefaultSummaryService">
+		<property name="criteriaDao" ref="criteriaDao" />
+		<property name="summaryDao" ref="summaryDao" />
+		<property name="recordDao" ref="recordDao" />
+	</bean>
+
+</beans>

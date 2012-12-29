@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<facelet-taglib xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd"
+	version="2.0">
+	<namespace>http://kooobao.com/jsf/ui</namespace>
+
+	<tag>
+		<tag-name>message</tag-name>
+		<component>
+			<component-type>javax.faces.Message</component-type>
+			<renderer-type>com.kooobao.jsf.ui.Message</renderer-type>
+		</component>
+
+		<attribute>
+			<name>for</name>
+			<required>false</required>
+		</attribute>
+	</tag>
+	<tag>
+		<tag-name>messages</tag-name>
+		<component>
+			<component-type>javax.faces.Messages</component-type>
+			<renderer-type>com.kooobao.jsf.ui.Messages</renderer-type>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>progress</tag-name>
+		<component>
+			<component-type>com.kooobao.jsf.ui.Progress</component-type>
+			<renderer-type>com.kooobao.jsf.ui.Progress</renderer-type>
+		</component>
+		<attribute>
+			<name>value</name>
+		</attribute>
+
+		<attribute>
+			<name>width</name>
+		</attribute>
+
+		<attribute>
+			<name>height</name>
+		</attribute>
+
+		<attribute>
+			<name>color</name>
+		</attribute>
+
+		<attribute>
+			<name>backgroundColor</name>
+		</attribute>
+		
+		<attribute>
+			<name>styleClass</name>
+		</attribute>
+	</tag>
+</facelet-taglib>
