@@ -60,20 +60,96 @@ function ajaxsend(){
 
 }
 </script>
+<script src="script/parameter.js"></script>
+<script src="script/plot.js"></script>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Query Site</title>
 </head>
 <body>
-<form>
-<label for="scheme">Ventilation Scheme:</label> 
-<select id="scheme" onchange="getclick();">
-	<option selected>
-	<option value="0">Natural
-	<option value="1">Air Conditioned
-</select> 
-<input type="button" value="get result" onclick="getresult();"/>
-</form>
-<div id="result"></div>
+	<div id="title"
+		style="position: fixed; top: 0; left: 0; margin: 0px; padding: 0px; width: 1000px;background:url(image/golden.jpg) top left repeat-x;">
+		<p style="font-size: 20px; font-style: bold; padding: 10px; float: left;">Flooring Model from CU Environment</p> 
+		<p style="padding:10px; float: right"><a href="#INTRO">Home</a>| <a href="#WORK">Distribution</a>|
+		<a href="#MODEL">Formula</a>| <a href="#ABOUT">About us</a>|<a href="#ABOUT">Feedback</a></p>
+
+	</div>
+
+		<div id="project" style="margin-top:100px; width:500px;">
+		<h3>House Flooring Health</h3>
+		<a name="INTRO" id="INTRO"></a>
+		<p>House structure, Air Flow, and human activities. This website
+			is demostrating how it will affect human health in different
+			scencarios. We also give a modeling formula to help you calculate
+			your environment health.</p>
+		<p>Blablabla...</p>
+		<p align="right">
+			<a href="#top">^ top</a>
+		</p>
+		<hr>
+		</div>
+		<div id="distribution" style="margin-top:0px;width:1000px;">
+		<div id="selection" style="float:left; width:500px;">
+		<h3>Different Scene Distribution</h3>
+		<a name="WORK" id="WORK"></a>
+		<p>We have tested against different house scenarios and validated
+			each scenarios' dust density.</p>
+		<p>We have found it is related to the following parameters. The
+			below will help you to determine what scenario you are looking for,
+			and We will show our test results.</p>
+			So You prefer<br />
+			the Ventilation Scheme to be
+			<form name="scheme" onmouseover="postdescription('scheme');">
+				<input type="radio" name="scheme" id="scheme" value="0" onclick="choose('scheme');"/>Natural ventilation<br /> 
+				<input type="radio" name="scheme" id="scheme" value="1" onclick="choose('scheme');"/>Mechanical ventilation
+			</form>
+			the House Type to be
+			<form name="house" onmouseover="postdescription('house');">
+				<input type="radio" name="house" id="house" value="0" onclick="choose('house');"/>Single Attached<br /> 
+				<input type="radio" name="house" id="house" value="1" onclick="choose('house');"/>Apartment Building
+			</form>
+			the Floor Type to be
+			<form name="floor" onmouseover="postdescription('floor');">
+				<input type="radio" name="floor" id="floor" value="0" onclick="choose('floor');"/>Hardwood<br /> 
+				<input type="radio" name="floor" id="floor" value="1" onclick="choose('floor');"/>Carpet<br />
+				<input type="radio" name="floor" id="floor" value="2" onclick="choose('floor');"/>HD Carpet<br />
+			</form>
+			the Floor Loading Type to be
+			<form name="loading"  onmouseover="postdescription('loading');">
+				<input type="radio" name="loading" id="loading" value="0" onclick="choose('loading');"/>Low<br /> 
+				<input type="radio" name="loading" id="loading" value="1" onclick="choose('loading');"/>Medium<br />
+				<input type="radio" name="loading" id="loading" value="2" onclick="choose('loading');"/>High
+			</form>
+			the Ventilation Rate to be
+			<form name="ventilation"  onmouseover="postdescription('ventilation');">
+				<input type="radio" name="ventilation" id="ventilation" value="0" onclick="choose('ventilation');"/>Low<br /> 
+				<input type="radio" name="ventilation" id="ventilation" value="1" onclick="choose('ventilation');"/>Medium<br />
+				<input type="radio" name="ventilation" id="ventilation" value="2" onclick="choose('ventilation');"/>High
+			</form>
+			the Particle Granularity to be
+			<form name="particle"  onmouseover="postdescription('particle');">
+				<input type="radio" name="particle" id="particle" value="0" onclick="choose('particle');"/>Fine<br /> 
+				<input type="radio" name="particle" id="particle" value="1" onclick="choose('particle');"/>Coarse<br />
+			</form>
+			the Resuspension Rate to be
+			<form name="resuspension" onmouseover="postdescription('resuspension');">
+				<input type="radio" name="resuspension" id="resuspension" value="0" onclick="choose('resuspension');"/>quiet<br /> 
+				<input type="radio" name="resuspension" id="resuspension" value="1" onclick="choose('resuspension');"/>active<br />
+				<input type="radio" name="resuspension" id="resuspension" value="2" onclick="choose('resuspension');"/>resuspensed
+			</form>
+			<input type="button" value="show the distribute" onClick="select();"/>
+			<input type="button" value="clear the plot" onClick="drapaxis();"/>
+			<div id="scenes"></div>		
+			</div>
+		<div id="parameter"
+			style="float: left; border: 1px solid; width: 400px;">
+			Explanation:</div>
+		<div style="clear: both;"></div>
+		
+		<canvas id="plot" width="1000px" height="800px">Please Find a browser that supports HTML5</canvas>
+		<p align="right">
+			<a href="#top">^ top</a>
+		</p>
+		</div>
 </body>
 </html>
