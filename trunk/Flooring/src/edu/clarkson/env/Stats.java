@@ -8,12 +8,22 @@ package edu.clarkson.env;
  *
  */
 public class Stats {
+	private int valid;
 	private double min;
 	private double p25;
 	private double medium;
 	private double p75;
 	private double max;
 	
+	@Override
+	public String toString() {
+		return "Statsinfo [valid=" + valid + ", min=" + min 
+										   + ", 25%=" + p25 
+									       + ", medium=" + medium 
+				                           + ", 75%=" + p75 
+									       + ", max=" + max 
+					  + ",]";
+	}
 	
 	/**
 	 * @return the min
@@ -76,12 +86,17 @@ public class Stats {
 		this.max = max;
 	}
 
-	@Override
-	public String toString() {
-		return "Statsinfo [min=" + min + ", 25%=" + p25 
-									   + ", medium=" + medium + "," 
-				                       + ", 75%=" + p75 + "," 
-									   + ", max=" + max + "," 
-				       + "]";
+
+	/**
+	 * @return the valid
+	 */
+	public int getValid() {
+		return valid;
+	}
+	/**
+	 * @param valid the valid to set
+	 */
+	public void setValid(int valid) {
+		this.valid = valid;
 	}
 }

@@ -19,49 +19,9 @@ function getclick(){
    document.getElementById("result").innerHTML=str;
 }
 
-function getresult(){
-
-    ajaxsend();
-}
-
-function ajaxsend(){
-	var xmlhttp;
-	xmlhttp = new XMLHttpRequest();
-	xmlhttp.onreadystatechange=function()
-	{
-	    if(xmlhttp.readyState==4 && xmlhttp.status==200)
-	    {
-	    	
-	    	document.getElementById("result").innerHTML="";
-	    	var stats = eval("("+xmlhttp.responseText+")");
-	    	for(var i=0; i<stats.length;i++ )
-	    	{
-				document.getElementById("result").innerHTML +=  "Record " + i + " stats as below:<br />";	    		
-				document.getElementById("result").innerHTML +=  "--------record min ------> " + stats[i].min +"<br />";
-				document.getElementById("result").innerHTML +=  "--------record 25% ------> " + stats[i].p25 +"<br />";
-				document.getElementById("result").innerHTML +=  "--------record medium ---> " + stats[i].medium +"<br />";
-				document.getElementById("result").innerHTML +=  "--------record 75% ------> " + stats[i].p75 +"<br />";
-				document.getElementById("result").innerHTML +=  "--------record max ------> " + stats[i].max +"<br />";
-	    	}
-			//document.getElementById("result").innerHTML=xmlhttp.responseText;
-	    }
-	    /*else{
-	    	document.getElementById("result").innerHTML="readystate is " + xmlhttp.readyState + "  and status is " + xmlhttp.status + " CANNOT PROCEED";
-	    }*/
-	}
-	xmlhttp.open("POST", "Query", true);
-	//var param = "scene=haha";	
-	var param = JSON.stringify(scene); //has to be serialized
-	xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-	//xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	//xmlhttp.setRequestHeader("Content-length", param.length);
-	//xmlhttp.setRequestHeader("Connection", "close");
-	xmlhttp.send(param);
-
-}
 </script>
-<script src="script/parameter.js"></script>
 <script src="script/plot.js"></script>
+<script src="script/parameter.js"></script>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Query Site</title>
@@ -75,7 +35,7 @@ function ajaxsend(){
 
 	</div>
 
-		<div id="project" style="margin-top:100px; width:500px;">
+		<div id="project" style="margin-top:100px; width:1000px;">
 		<h3>House Flooring Health</h3>
 		<a name="INTRO" id="INTRO"></a>
 		<p>House structure, Air Flow, and human activities. This website
@@ -89,67 +49,78 @@ function ajaxsend(){
 		<hr>
 		</div>
 		<div id="distribution" style="margin-top:0px;width:1000px;">
-		<div id="selection" style="float:left; width:500px;">
-		<h3>Different Scene Distribution</h3>
-		<a name="WORK" id="WORK"></a>
-		<p>We have tested against different house scenarios and validated
-			each scenarios' dust density.</p>
-		<p>We have found it is related to the following parameters. The
-			below will help you to determine what scenario you are looking for,
-			and We will show our test results.</p>
-			So You prefer<br />
-			the Ventilation Scheme to be
-			<form name="scheme" onmouseover="postdescription('scheme');">
-				<input type="radio" name="scheme" id="scheme" value="0" onclick="choose('scheme');"/>Natural ventilation<br /> 
-				<input type="radio" name="scheme" id="scheme" value="1" onclick="choose('scheme');"/>Mechanical ventilation
-			</form>
-			the House Type to be
-			<form name="house" onmouseover="postdescription('house');">
-				<input type="radio" name="house" id="house" value="0" onclick="choose('house');"/>Single Attached<br /> 
-				<input type="radio" name="house" id="house" value="1" onclick="choose('house');"/>Apartment Building
-			</form>
-			the Floor Type to be
-			<form name="floor" onmouseover="postdescription('floor');">
-				<input type="radio" name="floor" id="floor" value="0" onclick="choose('floor');"/>Hardwood<br /> 
-				<input type="radio" name="floor" id="floor" value="1" onclick="choose('floor');"/>Carpet<br />
-				<input type="radio" name="floor" id="floor" value="2" onclick="choose('floor');"/>HD Carpet<br />
-			</form>
-			the Floor Loading Type to be
-			<form name="loading"  onmouseover="postdescription('loading');">
-				<input type="radio" name="loading" id="loading" value="0" onclick="choose('loading');"/>Low<br /> 
-				<input type="radio" name="loading" id="loading" value="1" onclick="choose('loading');"/>Medium<br />
-				<input type="radio" name="loading" id="loading" value="2" onclick="choose('loading');"/>High
-			</form>
-			the Ventilation Rate to be
-			<form name="ventilation"  onmouseover="postdescription('ventilation');">
-				<input type="radio" name="ventilation" id="ventilation" value="0" onclick="choose('ventilation');"/>Low<br /> 
-				<input type="radio" name="ventilation" id="ventilation" value="1" onclick="choose('ventilation');"/>Medium<br />
-				<input type="radio" name="ventilation" id="ventilation" value="2" onclick="choose('ventilation');"/>High
-			</form>
-			the Particle Granularity to be
-			<form name="particle"  onmouseover="postdescription('particle');">
-				<input type="radio" name="particle" id="particle" value="0" onclick="choose('particle');"/>Fine<br /> 
-				<input type="radio" name="particle" id="particle" value="1" onclick="choose('particle');"/>Coarse<br />
-			</form>
-			the Resuspension Rate to be
-			<form name="resuspension" onmouseover="postdescription('resuspension');">
-				<input type="radio" name="resuspension" id="resuspension" value="0" onclick="choose('resuspension');"/>quiet<br /> 
-				<input type="radio" name="resuspension" id="resuspension" value="1" onclick="choose('resuspension');"/>active<br />
-				<input type="radio" name="resuspension" id="resuspension" value="2" onclick="choose('resuspension');"/>resuspensed
-			</form>
-			<input type="button" value="show the distribute" onClick="select();"/>
-			<input type="button" value="clear the plot" onClick="drapaxis();"/>
-			<div id="scenes"></div>		
+		<div id="selection" style="float: left; width: 500px;">
+			<h3>Different Scene Distribution</h3>
+			<a name="WORK" id="WORK"></a>
+			<p>We have tested against different house scenarios and validated
+				each scenarios' dust density.</p>
+			<p>We have found it is related to the following parameters. The
+				below will help you to determine what scenario you are looking for,
+				and We will show our test results.</p>
+			So You prefer<br /> the Ventilation Scheme to be
+			<FORM>
+				<label for="scheme" onmousemove="postdescription('scheme')">Ventilation Scheme:</label> 
+				<select id="scheme"
+					onmousemove="postdescription('scheme')">
+					<option selected>
+					<option value="Natural">Natural
+					<option value="Mechanical">Mechanical
+				</select> <br /> 
+				<label for="house" onmousemove="postdescription('house')">House Type:</label> 
+				<select id="house"
+					onmousemove="postdescription('house')">
+					<option selected>
+					<option value="Single">Single Detached
+					<option value="Apartment">Apartment Building
+				</select> <br /> 
+				<label for="floor" onmousemove="postdescription('floor')">Flooring Type:</label> 
+				<select	id="floor" onmousemove="postdescription('floor')">
+					<option selected>
+					<option value="Hardwood">Hardwood
+					<option value="Carpet">Carpeting
+					<option value="HDCarpet">HD Carpeting
+				</select> <br /> 
+				<label for="loading" onmousemove="postdescription('loading')">Flooring Loading:</label> 
+				<select id="loading" onmousemove="postdescription('loading')">
+					<option selected>
+					<option value="LowL">Low Loading
+					<option value="MediumL">Medium Loading
+					<option value="HighL">High Loading
+				</select> <br /> 
+				<label for="ventilation" onmousemove="postdescription('ventilation')">Ventilation Rate Level:</label> 
+				<select id="ventilation" onmousemove="postdescription('ventilation')">
+					<option selected>
+					<option value="LowR">Low Rate
+					<option value="MediumR">Medium Rate
+					<option value="HighR">High Rate
+				</select> <br /> 
+				<label for="particle" onmousemove="postdescription('particle')">Particle Granularity:</label> 
+				<select	id="particle" onmousemove="postdescription('particle')">
+					<option selected>
+					<option value="Fine">Fine
+					<option value="Coarse">Coarse
+				</select> <br /> 
+				<label for="resuspension" onmousemove="postdescription('resuspension')">Probability of Suspension:</label> 
+				<select id="resuspension" onmousemove="postdescription('resuspension')">
+					<option selected>
+					<option value="Quiet">quiet
+					<option value="Active">active
+					<option value="Resuspend">resuspend
+				</select>
+			</FORM>
+
+			<input type="button" value="show the distribute" onClick="check();" /> 
+			<input type="button" value="clear the plot" onClick="clearplot();" />
+			<div id="scenes"></div>
 			</div>
-		<div id="parameter"
-			style="float: left; border: 1px solid; width: 400px;">
-			Explanation:</div>
-		<div style="clear: both;"></div>
-		
-		<canvas id="plot" width="1000px" height="800px">Please Find a browser that supports HTML5</canvas>
-		<p align="right">
-			<a href="#top">^ top</a>
-		</p>
-		</div>
-</body>
+			<div id="parameter"	style="float: left; border: 1px solid; width: 400px;">
+				Explanation:
+			</div>
+			<div style="clear: both;"></div>
+
+			<canvas id="plot" width="1000px" height="800px">Please Find a browser that supports HTML5</canvas>
+			<p align="right">
+				<a href="#top">^ top</a>
+			</p>
+		</div></body>
 </html>

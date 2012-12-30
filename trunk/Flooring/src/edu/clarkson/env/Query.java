@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.servlet.ServletConfig;
@@ -17,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 /**
  * Servlet implementation class Query
@@ -82,8 +80,8 @@ public class Query extends HttpServlet {
 	     * 
 	     */
 	    Gson gson = new Gson();
-	    Scene[] scenes = gson.fromJson(inputStringBuilder.toString(), Scene[].class);
-
+	    Scene scene = gson.fromJson(inputStringBuilder.toString(), Scene.class);
+	    System.out.println(scene.toString());
 	    /*
 	     * 
 	     * do the query to database
@@ -91,10 +89,8 @@ public class Query extends HttpServlet {
 	     */
 
 
-    	ArrayList<Stats> stats = new ArrayList<Stats>();
-    	for(int i=0; i< scenes.length;i++){
-    		Stats stat = new Stats();
-        	ArrayList<Double> record = new ArrayList<Double>();
+    	Stats stat = new Stats();
+        ArrayList<Double> record = new ArrayList<Double>();
         	/*
         	 *  construct the file path by query
         	 */
@@ -102,43 +98,49 @@ public class Query extends HttpServlet {
         	/*
         	 * path build to the right scene
         	 */
-        	{
-        		path += "/DATA";
-        		path += "/"+scenes[i].getScheme();
-        		path += "/record.csv";
-        	}
-        	ServletContext context = request.getSession().getServletContext();
+       		path += "/DATA";
+       		path += "/"+scene.toFile();
+       		System.out.println(scene.toFile());
+
+       		ServletContext context = request.getSession().getServletContext();
         	//detect stream == null for SC_NOT_FOUND
     	    InputStream stream = context.getResourceAsStream(path);
-        	BufferedReader buffer = new BufferedReader(new InputStreamReader(stream));
-    	    String str = new String();
-    	    while((str = buffer.readLine())!=null){
-    	    	record.add(Double.parseDouble(str));
-    	    }	    	
+    	    if( stream == null){
+    	    	stat.setValid(0);
+    	    }
+    	    else{
+            	BufferedReader buffer = new BufferedReader(new InputStreamReader(stream));
+        	    String str = new String();
+        	    while((str = buffer.readLine())!=null){
+        	    	try{
+            	    	record.add(Double.parseDouble(str));        	    		
+        	    	}
+        	    	catch(NumberFormatException e){
+        	    		System.out.println("Not an digit format: "+ str + "<-|");
+        	    	}
+        	    }	    	
 
-    	    Collections.sort(record);
+        	    Collections.sort(record);
 
-    	    /*
-    	     * Can be wrapped in one function
-    	     */
-    	    int total = record.size();
-    	    stat.setMin(record.get(0));
-    	    stat.setP25(record.get((int)(total*0.25)));
-    	    stat.setMedium(record.get((int)(total*0.5)));
-    	    stat.setP75(record.get((int)(total*0.75)));
-    	    stat.setMax(record.get(total-1));
-    	    
-    	    stats.add(stat);
-    	}
+        	    /*
+        	     * Can be wrapped in one function
+        	     */
+        	    int total = record.size();
+        	    stat.setMin(record.get(0));
+        	    stat.setP25(record.get((int)(total*0.25)));
+        	    stat.setMedium(record.get((int)(total*0.5)));
+        	    stat.setP75(record.get((int)(total*0.75)));
+        	    stat.setMax(record.get(total-1));
+        	    stat.setValid(1);
+    	    	
+    	    }
+
 	    /*
 	     *
 	     *  Response with stats results
 	     *  
 	     */
-	    Type type = new TypeToken<ArrayList<Stats>>(){}.getType();
-	    responseOutput.println(gson.toJson(stats, type));
-	    //responseOutput.println(gson.toJson(record));
-	    //responseOutput.println(query.getJSONArray(0));
+	    responseOutput.println(gson.toJson(stat, Stats.class));
 	    responseOutput.close();
 
 	}
