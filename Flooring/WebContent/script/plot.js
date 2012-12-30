@@ -12,6 +12,7 @@ function init() {
             stats[x][0] = 0;
         }
         scenelist();
+        calculate();
     }
     window.onload = init;
 
@@ -301,4 +302,39 @@ function init() {
 		context.moveTo(100+100+100*(sceneno-1), 595);
 		context.lineTo(100+100+100*(sceneno-1), 600);
 		context.stroke();
+    }
+    
+    
+    function download(){
+    	var i = document.getElementById("scenelist").value;
+        if (i != "-1") {
+    		scene.scheme = scenes[i][2];
+    		scene.house= scenes[i][3];
+    		scene.floor= scenes[i][4];
+    		scene.loading= scenes[i][5];
+    		scene.ventilation = scenes[i][6];
+    		scene.particle= scenes[i][7];
+    		scene.resuspension = scenes[i][8];
+        }
+    	ajaxdownload(scene);
+    }
+    
+    function ajaxdownload(scenespec){
+    	var xmlhttp;
+    	xmlhttp = new XMLHttpRequest();
+    	xmlhttp.onreadystatechange=function()
+    	{
+    	    if(xmlhttp.readyState==4 && xmlhttp.status==200)
+    	    {
+    	    	
+    	    }
+ 
+    	};
+    	
+    	xmlhttp.open("POST", "Download", true);
+    	//var param = "scene=haha";	
+    	var param = JSON.stringify(scenespec); //has to be serialized
+    	xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    	xmlhttp.send(param);
+
     }
