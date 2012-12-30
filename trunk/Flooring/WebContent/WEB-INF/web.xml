@@ -10,11 +10,11 @@
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
   <servlet>
-  	<servlet-name>Query</servlet-name>
-  	<servlet-class>edu.clarkson.env.Query</servlet-class>
+    <servlet-name>Query</servlet-name>
+    <servlet-class>edu.clarkson.env.Query</servlet-class>
   </servlet>
   <servlet-mapping>
-  	<servlet-name>Query</servlet-name>
-  	<url-pattern>/Query</url-pattern>
+    <servlet-name>Query</servlet-name>
+    <url-pattern>/Query</url-pattern>
   </servlet-mapping>
 </web-app>

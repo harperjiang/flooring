@@ -2,26 +2,10 @@
 <html>
 <script type="text/javascript">
 
-var scene = [];
-
-function getclick(){
-    if (document.getElementById("scheme").value == ""){
-        document.getElementById("result").innerHTML = "scheme should be selected";
-        return;
-    }
-    else{
-    	scene.push({"scheme":document.getElementById("scheme").value});
-    }
-    var str = new String();
-    for(var i=0; i<scene.length;i++){
-    	str+=scene[i].scheme+" haha<br />"
-    }
-   document.getElementById("result").innerHTML=str;
-}
-
 </script>
 <script src="script/plot.js"></script>
 <script src="script/parameter.js"></script>
+<script src="script/formula.js"></script>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Query Site</title>
@@ -122,5 +106,44 @@ function getclick(){
 			<p align="right">
 				<a href="#top">^ top</a>
 			</p>
-		</div></body>
+		<hr>
+	    </div>
+		
+		<div id="formula" style="margin-top:0px; width:1000px;">
+		<h3>Math Flooring Model</h3>
+		<a name="MODEL" id="MODEL"></a>
+		<p>Here we can show you how to calculator the model</p>
+		<table style="text-align: center; vertical-align: middle;" align="center" cellpadding="0" cellspacing="0">
+			<tr>
+				<td rowspan="2" nowrap="nowrap"><i>C</i><sub>in</sub> =</td>
+				<td nowrap="nowrap"><i>S</i>/<i>v</i> + <i>paC</i><sub>out</sub>
+				</td>
+			</tr>
+			<tr>
+				<td style="border-top:solid 1px black;"><i>a</i>+<i>k</i></td>
+			</tr>
+		</table>
+		<table style="text-align: center; vertical-align: middle;" align="center" cellpadding="0" cellspacing="0">
+			<tr>
+				<td rowspan="2" nowrap="nowrap"><i>C</i><sub>in</sub> =</td>
+				<td nowrap="nowrap"><input type="text" id="S" size="1" value="5" onkeyup="calculate();">/<input type="text" id="v" size="1" value="6" onkeyup="calculate();"> + <input type="text" id="p" size="1" value="7" onkeyup="calculate();">*<input type="text" id="a1" size="1" value="8" onkeyup="calculatea('a1');">*<input type="text" id="Cout" size="1" value="9" onkeyup="calculate();">
+				</td>
+			</tr>
+			<tr>
+				<td style="border-top:solid 1px black;"><input type="text" id="a2" size="1" value="10" onkeyup="calculatea('a2');">+<input type="text" id="k" size="1" value="11" onkeyup="calculate();"></td>
+			</tr>
+			<tr>
+				<td style="text-align:right">=</td><td style="text-align:left"><input type="text" id="Cin" size="5" value="" onmousemove="calculate();"></td>
+			</tr>
+		</table>
+
+		<p align="right">
+			<a href="#top">^ top</a>
+		</p>
+		<div id="expression"></div>
+		<hr>
+		</div>
+		
+		
+		</body>
 </html>
