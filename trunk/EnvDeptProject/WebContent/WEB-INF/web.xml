@@ -55,6 +55,10 @@
 			<param-name>accessLogLevel</param-name>
 			<param-value>CALL</param-value>
 		</init-param>
+		<init-param>
+			<param-name>crossDomainSessionSecurity</param-name>
+			<param-value>false</param-value>
+		</init-param>
 		<load-on-startup>2</load-on-startup>
 	</servlet>
 	<servlet-mapping>
