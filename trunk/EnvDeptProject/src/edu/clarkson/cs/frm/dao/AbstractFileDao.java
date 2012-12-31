@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,29 +14,40 @@ import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import javax.persistence.NoResultException;
+
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
+import com.google.gson.Gson;
 import com.kooobao.common.domain.dao.Cursor;
 import com.kooobao.common.domain.dao.Dao;
 import com.kooobao.common.domain.entity.SimpleEntity;
-import com.kooobao.common.json.JsonBeanReader;
-import com.kooobao.common.json.JsonWriter;
 
-public class AbstractFileDao<Entity extends SimpleEntity> implements
-		Dao<Entity>, InitializingBean {
+public abstract class AbstractFileDao<Entity extends SimpleEntity, Stub extends SimpleEntity>
+		implements Dao<Entity>, InitializingBean {
+
+	protected static Map<Class, AbstractFileDao> daos;
+	static {
+		daos = new HashMap<Class, AbstractFileDao>();
+	}
 
 	private String fileName;
 
 	private long syncInterval = 5000;
 
-	protected Map<Long, Entity> storage;
+	private long oidCounter = 1;
+
+	protected Map<Long, Stub> storage;
 
 	protected ReadWriteLock lock = new ReentrantReadWriteLock();
 
+	protected boolean dirty = false;
+
 	public AbstractFileDao() {
 		super();
-		storage = new HashMap<Long, Entity>();
+		daos.put(getParamClass(), this);
+		storage = new HashMap<Long, Stub>();
 	}
 
 	@Override
@@ -50,9 +62,14 @@ public class AbstractFileDao<Entity extends SimpleEntity> implements
 			FileInputStream fis = new FileInputStream(fileName);
 			BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 			String line = null;
-			JsonBeanReader<Entity> reader = new JsonBeanReader<Entity>();
+			Gson gson = new Gson();
 			while ((line = br.readLine()) != null) {
-				store(reader.read(line));
+				Stub e = gson.fromJson(line, getParamClass2());
+				oidCounter = Math.max(oidCounter, e.getOid() + 1);
+				if (e.getOid() == 0) {
+					e.setOid(oidCounter++);
+				}
+				storage.put(e.getOid(), e);
 			}
 			br.close();
 		} catch (Exception e) {
@@ -65,24 +82,34 @@ public class AbstractFileDao<Entity extends SimpleEntity> implements
 	protected void doSync() {
 		lock.readLock().lock();
 		try {
+			if (!dirty)
+				return;
 			PrintWriter pw = new PrintWriter(new FileOutputStream(fileName));
-			JsonWriter writer = new JsonWriter();
-			for (Entity e : storage.values()) {
-				writer.write(e);
-				pw.println(writer.toString());
+			Gson gson = new Gson();
+			for (Stub e : storage.values()) {
+				pw.println(gson.toJson(e));
 			}
 			pw.close();
+			dirty = false;
 		} catch (Exception e) {
+			LoggerFactory.getLogger(getClass()).error(
+					"Exception in AbstractFileDao.doSync", e);
 		} finally {
 			lock.readLock().unlock();
 		}
 	}
 
+	protected abstract Stub wrap(Entity e);
+
+	protected abstract Entity unwrap(Stub o);
+
 	@Override
 	public Entity find(long oid) {
 		lock.readLock().lock();
 		try {
-			return storage.get(oid);
+			if (!storage.containsKey(oid))
+				throw new NoResultException();
+			return unwrap(storage.get(oid));
 		} finally {
 			lock.readLock().unlock();
 		}
@@ -92,9 +119,10 @@ public class AbstractFileDao<Entity extends SimpleEntity> implements
 	public Entity store(Entity entity) {
 		lock.writeLock().lock();
 		try {
+			dirty = true;
 			if (entity.getOid() == 0)
-				entity.setOid(storage.size());
-			storage.put(entity.getOid(), entity);
+				entity.setOid(oidCounter++);
+			storage.put(entity.getOid(), wrap(entity));
 			return entity;
 		} finally {
 			lock.writeLock().unlock();
@@ -105,7 +133,8 @@ public class AbstractFileDao<Entity extends SimpleEntity> implements
 	public Entity remove(Entity entity) {
 		lock.writeLock().lock();
 		try {
-			return storage.remove(entity.getOid());
+			dirty = true;
+			return unwrap(storage.remove(entity.getOid()));
 		} finally {
 			lock.writeLock().unlock();
 		}
@@ -115,12 +144,13 @@ public class AbstractFileDao<Entity extends SimpleEntity> implements
 	public Entity find(Entity example) {
 		lock.readLock().lock();
 		try {
-			for (Entity val : storage.values()) {
-				if (val.equals(example)) {
-					return val;
+			Stub s = wrap(example);
+			for (Stub val : storage.values()) {
+				if (val.equals(s)) {
+					return unwrap(val);
 				}
 			}
-			return null;
+			throw new NoResultException();
 		} finally {
 			lock.readLock().unlock();
 		}
@@ -150,7 +180,8 @@ public class AbstractFileDao<Entity extends SimpleEntity> implements
 		lock.readLock().lock();
 		try {
 			final List<Entity> list = new ArrayList<Entity>();
-			list.addAll(storage.values());
+			for (Stub s : storage.values())
+				list.add(unwrap(s));
 			return new ListCursor(list);
 		} finally {
 			lock.readLock().unlock();
@@ -189,7 +220,24 @@ public class AbstractFileDao<Entity extends SimpleEntity> implements
 
 	@Override
 	public void removeAll() {
-		storage.clear();
+		lock.readLock().lock();
+		try {
+			dirty = true;
+			storage.clear();
+		} finally {
+			lock.readLock().unlock();
+		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public Class<Entity> getParamClass() {
+		return (Class<Entity>) ((ParameterizedType) getClass()
+				.getGenericSuperclass()).getActualTypeArguments()[0];
+	}
+
+	@SuppressWarnings("unchecked")
+	public Class<Stub> getParamClass2() {
+		return (Class<Stub>) ((ParameterizedType) getClass()
+				.getGenericSuperclass()).getActualTypeArguments()[1];
+	}
 }

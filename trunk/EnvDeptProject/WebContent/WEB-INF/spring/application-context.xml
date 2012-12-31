@@ -3,16 +3,23 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-	<import resource="env.xml" />
+	<import resource="env-file.xml" />
 
-	<bean id="criteriaDao" class="edu.clarkson.cs.env.dao.jpa.JpaCriteriaDao">
-		<property name="entityManager" ref="entityManager" />
+	<!-- bean id="criteriaDao" class="edu.clarkson.cs.env.dao.jpa.JpaCriteriaDao"> 
+		<property name="entityManager" ref="entityManager" /> </bean> <bean id="recordDao" 
+		class="edu.clarkson.cs.env.dao.jpa.JpaRecordDao"> <property name="entityManager" 
+		ref="entityManager" /> </bean> <bean id="summaryDao" class="edu.clarkson.cs.env.dao.jpa.JpaSummaryDao"> 
+		<property name="entityManager" ref="entityManager" /> </bean -->
+
+
+	<bean id="criteriaDao" class="edu.clarkson.cs.env.dao.file.FileCriteriaDao">
+		<property name="fileName" value="/home/harper/temp/dao/criteriaDao" />
 	</bean>
-	<bean id="recordDao" class="edu.clarkson.cs.env.dao.jpa.JpaRecordDao">
-		<property name="entityManager" ref="entityManager" />
+	<bean id="recordDao" class="edu.clarkson.cs.env.dao.file.FileRecordDao">
+		<property name="fileName" value="/home/harper/temp/dao/recordDao" />
 	</bean>
-	<bean id="summaryDao" class="edu.clarkson.cs.env.dao.jpa.JpaSummaryDao">
-		<property name="entityManager" ref="entityManager" />
+	<bean id="summaryDao" class="edu.clarkson.cs.env.dao.file.FileSummaryDao">
+		<property name="fileName" value="/home/harper/temp/dao/summaryDao" />
 	</bean>
 
 	<bean id="fileService" class="edu.clarkson.cs.env.service.DefaultFileService">
