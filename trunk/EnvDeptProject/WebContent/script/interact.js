@@ -97,6 +97,20 @@ function remove_distribution() {
 	thechart.redraw();
 };
 
+function download_distribution() {
+	var selection = thedatatable.selectModel.getSelection();
+	if(selection.length == 0) {
+		show_dialog_content('Choose Data', 'No criteria is chosen to download');
+		return;
+	}
+	// Open new window for download
+	var idarray = new Array();
+	for(var i = 0 ; i < selection.length;i++) {
+		idarray.push(thedatatable.datas[selection[i]].criteria.oid);
+	}
+	window.open("download?criteria="+idarray.join("_"));
+}
+
 var ventSchemeText = [ 'Natural', 'Air Conditioned' ];
 var houseTypeText = [ 'Single Detached', 'Apartment Building' ];
 var floorTypeText = [ 'Hardwood', 'Carpeting', 'HD Carpeting' ];
