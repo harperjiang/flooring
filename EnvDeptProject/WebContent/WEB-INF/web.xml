@@ -67,7 +67,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Download File Servlet</servlet-name>
-		<url-pattern>/download/*</url-pattern>
+		<url-pattern>/download</url-pattern>
 	</servlet-mapping>
 	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>

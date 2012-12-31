@@ -123,32 +123,65 @@ public class DefaultFileService implements FileService {
 		}
 	}
 
+	static final String[] ventSchemeText = { "Natural", "Air Conditioned" };
+	static final String[] houseTypeText = { "Single Detached",
+			"Apartment Building" };
+	static final String[] floorTypeText = { "Hardwood", "Carpeting",
+			"HD Carpeting" };
+	static final String[] floorLoadingText = { "Low", "Medium", "High" };
+	static final String[] ventLevelText = { "Low", "Medium", "High" };
+	static final String[] partGranText = { "Fine", "Coarse" };
+	static final String[] probSusText = { "CR=0", "CR≠0", "CR=∅" };
+
+	static final String formatCriteria(Criteria c) {
+		StringBuilder result = new StringBuilder();
+		result.append("Ventialization Scheme:")
+				.append(ventSchemeText[c.getVentScheme() - 1]).append(",");
+		result.append("House Type:")
+				.append(houseTypeText[c.getHouseType() - 1]).append(",");
+		result.append("Floor Type:")
+				.append(floorTypeText[c.getFloorType() - 1]).append(",");
+		result.append("Floor Loading:")
+				.append(floorLoadingText[c.getFloorLoading() - 1]).append(",");
+		result.append("Ventialization Level:")
+				.append(ventLevelText[c.getVentLevel() - 1]).append(",");
+		result.append("Particle Granularity:")
+				.append(partGranText[c.getPartGran() - 1]).append(",");
+		result.append("Probability of Suspension:").append(
+				probSusText[c.getProbabilitySuspension() - 1]);
+		return result.toString();
+	}
+
 	@Override
-	public void downloadRecords(Criteria criteria, OutputStream output) {
-		Criteria copy = getCriteriaDao().find(criteria);
-		if (copy == null)
-			throw new IllegalArgumentException("No Data Found");
-		Cursor<Record> records = getRecordDao().findAll(criteria);
+	public void downloadRecords(String[] cids, OutputStream output) {
 
 		// Create XLS files
 		Workbook wb = new HSSFWorkbook();
-		Sheet sheet = wb.createSheet("data");
+		int sheetCounter = 0;
+		for (String cid : cids) {
+			Sheet sheet = wb.createSheet("Data Set " + ((sheetCounter++) + 1));
+			Criteria criteria = getCriteriaDao().find(Integer.valueOf(cid));
+			if (criteria == null)
+				continue;
+			Cursor<Record> records = getRecordDao().findAll(criteria);
 
-		// TODO The first row is condition
-
-		int counter = 0;
-		while (records.hasNext()) {
-			Record record = records.next();
-			Row row = sheet.createRow(counter);
-			Cell cell = row.createCell(0);
-			cell.setCellValue(record.getData().doubleValue());
+			// The first row displays condition
+			Row row = sheet.createRow(0);
+			Cell cell = row.createCell(0, Cell.CELL_TYPE_STRING);
+			cell.setCellValue(formatCriteria(criteria));
+			int counter = 1;
+			while (records.hasNext()) {
+				Record record = records.next();
+				row = sheet.createRow(counter++);
+				cell = row.createCell(0, Cell.CELL_TYPE_NUMERIC);
+				cell.setCellValue(record.getData().doubleValue());
+			}
 		}
 		try {
 			wb.write(output);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-
 	}
 
 	private RecordDao recordDao;
